@@ -161,6 +161,7 @@ fn cli(argv: &[String]) -> Result<String, String> {
         }
         Some("status") | None => Ok(format!("Twilio\n  creds: {}",
             if creds().is_ok() { "set" } else { "MISSING" })),
+        Some("-h" | "--help" | "help") => Ok("usage: twilio setup | status".into()),
         Some(o) => Err(format!("unknown verb {o}")),
     }
 }
