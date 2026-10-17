@@ -159,8 +159,10 @@ fn cli(argv: &[String]) -> Result<String, String> {
             }
             Ok("saved".into())
         }
-        Some("status") | None => Ok(format!("Twilio\n  creds: {}",
-            if creds().is_ok() { "set" } else { "MISSING" })),
+        Some("status") | None => Ok(format!("Twilio\n  sid: {}\n  token: {}\n  from: {}",
+            cfg("sid", "TWILIO_SID").unwrap_or("MISSING".into()),
+            if cfg("token", "TWILIO_TOKEN").is_some() { "set" } else { "MISSING" },
+            cfg("from", "TWILIO_FROM").unwrap_or("MISSING".into()))),
         Some("-h" | "--help" | "help") => Ok("usage: twilio setup | status".into()),
         Some(o) => Err(format!("unknown verb {o}")),
     }
