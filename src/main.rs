@@ -14,12 +14,12 @@ fn manifest() -> Value {
         "name": NAME, "display_name": "Twilio SMS",
         "version": env!("CARGO_PKG_VERSION"), "protocol": "1.1",
         "tools": [
-            {"name": "twilio_send",
+            {"name": "twilio_send", "label": "SMS", "preview": "{to}\n{body|firstline}",
              "description": "Send an SMS via Twilio.",
              "parameters": {"type": "object", "properties": {
                 "to": {"type": "string", "description": "E.164 number"},
                 "body": {"type": "string"}}, "required": ["to","body"]}},
-            {"name": "twilio_inbox",
+            {"name": "twilio_inbox", "label": "SMS inbox",
              "description": "Recent inbound SMS to the configured number (polled — no webhook needed).",
              "parameters": {"type": "object", "properties": {
                 "limit": {"type": "integer"}}}},
