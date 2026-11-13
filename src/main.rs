@@ -25,6 +25,7 @@ fn manifest() -> Value {
                 "limit": {"type": "integer"}}}},
         ],
         "commands": ["/twilio"], "subcommands": ["twilio"],
+        "command_descriptions": {"/twilio": "Twilio SMS bridge"},
     })
 }
 
