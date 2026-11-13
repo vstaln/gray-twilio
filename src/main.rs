@@ -14,17 +14,18 @@ fn manifest() -> Value {
         "name": NAME, "display_name": "Twilio SMS",
         "version": env!("CARGO_PKG_VERSION"), "protocol": "1.1",
         "tools": [
-            {"name": "twilio_send",
+            {"name": "twilio_send", "label": "SMS", "preview": "{to}\n{body|firstline}",
              "description": "Send an SMS via Twilio.",
              "parameters": {"type": "object", "properties": {
                 "to": {"type": "string", "description": "E.164 number"},
                 "body": {"type": "string"}}, "required": ["to","body"]}},
-            {"name": "twilio_inbox",
+            {"name": "twilio_inbox", "label": "SMS inbox",
              "description": "Recent inbound SMS to the configured number (polled — no webhook needed).",
              "parameters": {"type": "object", "properties": {
                 "limit": {"type": "integer"}}}},
         ],
         "commands": ["/twilio"], "subcommands": ["twilio"],
+        "command_descriptions": {"/twilio": "Twilio SMS bridge"},
     })
 }
 
@@ -213,8 +214,14 @@ fn cli(argv: &[String]) -> Result<String, String> {
             Ok("saved".into())
         }
         Some("status") | None => Ok(format!(
-            "Twilio\n  creds: {}",
-            if creds().is_ok() { "set" } else { "MISSING" }
+            "Twilio\n  sid: {}\n  token: {}\n  from: {}",
+            cfg("sid", "TWILIO_SID").unwrap_or("MISSING".into()),
+            if cfg("token", "TWILIO_TOKEN").is_some() {
+                "set"
+            } else {
+                "MISSING"
+            },
+            cfg("from", "TWILIO_FROM").unwrap_or("MISSING".into())
         )),
         Some("-h" | "--help" | "help") => Ok("usage: twilio setup | status".into()),
         Some(o) => Err(format!("unknown verb {o}")),
